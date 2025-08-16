@@ -32,9 +32,9 @@ public class AuthService {
     private final TrustedDeviceRepository trustedDeviceRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
     private final DeviceFingerprintService deviceFingerprintService;
-    private final AuthenticationManager authenticationManager;
 
     @Value("${app.security.max-failed-attempts:5}")
     private int maxFailedAttempts;
@@ -174,6 +174,7 @@ public class AuthService {
     /**
      * Verify email address
      */
+    @Transactional
     public VerificationResponse verifyEmail(String token) {
         User user = userRepository.findByEmailVerificationToken(token)
                 .orElseThrow(() -> new InvalidTokenException("Invalid verification token"));
@@ -447,6 +448,31 @@ public class AuthService {
                 });
 
         log.info("User {} logged out from all devices", userId);
+    }
+
+    /**
+     * Delete user account and all associated data
+     */
+    public void deleteUserAccount(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        log.info("Deleting user account: {}", user.getUsername());
+
+        // First, delete all trusted devices
+        List<TrustedDevice> devices = trustedDeviceRepository.findByUser(user);
+        if (!devices.isEmpty()) {
+            log.info("Deleting {} trusted devices for user {}", devices.size(), user.getUsername());
+            trustedDeviceRepository.deleteAll(devices);
+        }
+
+        // Clear the trusted devices collection in the user entity
+        user.getTrustedDevices().clear();
+
+        // Now delete the user
+        userRepository.delete(user);
+
+        log.info("User account deleted successfully: {}", user.getUsername());
     }
 
     /**

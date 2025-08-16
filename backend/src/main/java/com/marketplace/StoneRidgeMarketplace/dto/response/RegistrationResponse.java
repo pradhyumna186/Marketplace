@@ -1,6 +1,7 @@
 package com.marketplace.StoneRidgeMarketplace.dto.response;
 
 import lombok.*;
+import com.marketplace.StoneRidgeMarketplace.dto.response.UserDto;
 
 @Data
 @NoArgsConstructor
@@ -11,4 +12,5 @@ public class RegistrationResponse {
     private String email;
     private String username;
     private boolean requiresVerification;
+    private UserDto user; // Include user data for frontend
 }

@@ -20,6 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -180,6 +181,23 @@ public class AuthController {
                                 ApiResponse.<Void>builder()
                                                 .success(true)
                                                 .message("Logged out from all devices")
+                                                .build());
+        }
+
+        @DeleteMapping("/account")
+        @PreAuthorize("isAuthenticated()")
+        @Operation(summary = "Delete user account")
+        public ResponseEntity<ApiResponse<Void>> deleteAccount(
+                        @AuthenticationPrincipal UserPrincipal principal) {
+
+                log.info("User {} requesting account deletion", principal.getUsername());
+
+                authService.deleteUserAccount(principal.getId());
+
+                return ResponseEntity.ok(
+                                ApiResponse.<Void>builder()
+                                                .success(true)
+                                                .message("Account deleted successfully")
                                                 .build());
         }
 

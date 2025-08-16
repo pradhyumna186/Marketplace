@@ -2,6 +2,7 @@ package com.marketplace.StoneRidgeMarketplace.dto.response;
 
 import lombok.*;
 import com.marketplace.StoneRidgeMarketplace.entity.enums.Role;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -22,4 +23,6 @@ public class UserDto {
     private boolean emailVerified;
     private boolean phoneVerified;
     private String profileImageUrl;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
