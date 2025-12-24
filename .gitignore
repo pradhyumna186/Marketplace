@@ -46,3 +46,7 @@ target/
 build/
 out/
 dist/
+
+### Environment Variables ###
+.env
+backend/.env
