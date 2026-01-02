@@ -39,7 +39,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        jwt = authHeader.substring(7);
+        // Extract token and trim any whitespace
+        jwt = authHeader.substring(7).trim();
+        
+        // Validate token is not empty
+        if (jwt.isEmpty()) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        
         try {
             username = jwtService.extractUsername(jwt);
 

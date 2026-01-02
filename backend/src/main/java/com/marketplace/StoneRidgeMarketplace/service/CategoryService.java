@@ -213,10 +213,16 @@ public class CategoryService {
 
     private CategoryRequestDto mapToCategoryRequestDto(CategoryRequest request) {
         return CategoryRequestDto.builder()
+                .id(request.getId())
                 .name(request.getName())
                 .description(request.getDescription())
                 .justification(request.getJustification())
                 .parentCategoryId(request.getParentCategory() != null ? request.getParentCategory().getId() : null)
+                .parentCategoryName(request.getParentCategory() != null ? request.getParentCategory().getName() : null)
+                .status(request.getStatus() != null ? request.getStatus().name() : null)
+                .requestedById(request.getRequestedBy() != null ? request.getRequestedBy().getId() : null)
+                .requestedByUsername(request.getRequestedBy() != null ? request.getRequestedBy().getUsername() : null)
+                .createdAt(request.getCreatedAt())
                 .build();
     }
 }

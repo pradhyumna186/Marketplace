@@ -10,6 +10,8 @@ import lombok.*;
 @Builder
 public class CategoryRequestDto {
     
+    private Long id; // For response only
+    
     @NotBlank(message = "Category name is required")
     @Size(min = 2, max = 50, message = "Category name must be between 2 and 50 characters")
     private String name;
@@ -21,4 +23,11 @@ public class CategoryRequestDto {
     private String justification;
     
     private Long parentCategoryId; // Optional for subcategories
+    
+    // Additional fields for response
+    private String status;
+    private Long requestedById;
+    private String requestedByUsername;
+    private String parentCategoryName;
+    private java.time.LocalDateTime createdAt;
 }
